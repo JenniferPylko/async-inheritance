@@ -1,0 +1,19 @@
+{
+  "name": "async-inheritance",
+  "version": "1.0.0",
+  "description": "Provide async constructor functionality to JavaScript classes",
+  "main": "AsyncClass.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brpylko/async-inheritance.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brpylko/async-inheritance/issues"
+  },
+  "homepage": "https://github.com/brpylko/async-inheritance#readme"
+}
