@@ -7,11 +7,11 @@ This module provides a class and the symbols necessary to create classes whose c
 The simplest async class looks like this:
 
 ```js
-const {AsyncClass, async_constructor, async_super} = require("async-inheritance")
+const { Async, constructor, Super } = require("async-inheritance")
 
-class MyClass extends AsyncClass {
-    async [async_constructor]() {
-        await this[async_super]()
+class MyClass extends Async {
+    async [constructor]() {
+        await this[Super]()
         // async code
     }
 }
@@ -22,22 +22,35 @@ class MyClass extends AsyncClass {
 })()
 ```
 
-Classes that extend AsyncClass can then be extended further:
+If you can't extend a function, simply wrap it:
 
 ```js
-const {AsyncClass, async_constructor, async_super} = require("async-inheritance")
+const { wrap } = require("async-inheritance")
+const { EventEmitter } = require("events")
+
+const WrappedClass = wrap(class extends EventEmitter {
+    async [constructor]() {
+        await asyncCode()
+    }
+})
+```
+
+Classes that extend Async can then be extended further:
+
+```js
+const { Async, constructor, Super } = require("async-inheritance")
 const timers = require("timers/promises")
 
-class MyClass1 extends AsyncClass {
-    async [async_constructor](construction_delay) {
-        await this[async_super]()
+class MyClass1 extends Async {
+    async [constructor](construction_delay) {
+        await this[Super]()
         await timers.setTimeout(construction_delay)
     }
 }
 
 class MyClass2 extends MyClass1 {
-    async [async_constructor]() {
-        await this[async_super](100)
+    async [constructor]() {
+        await this[Super](100)
         console.log("Finished constructor")
     }
 }
@@ -47,15 +60,15 @@ class MyClass2 extends MyClass1 {
 })()
 ```
 
-If a child class overrides \[\[async_constructor]] it _must_ call \[\[async_super]], but the constructor can be omitted entirely with no issue:
+If a child class overrides \[\[constructor]] it _must_ call \[\[Super]], but the constructor can be omitted entirely with no issue:
 
 ```js
-const {AsyncClass, async_constructor, async_super} = require("async-inheritance")
+const { Async, constructor, Super } = require("async-inheritance")
 const timers = require("timers/promises")
 
-class MyClass1 extends AsyncClass {
-    async [async_constructor](construction_delay) {
-        await this[async_super]()
+class MyClass1 extends Async {
+    async [constructor](construction_delay) {
+        await this[Super]()
         await timers.setTimeout(construction_delay)
     }
     do_something() {
@@ -71,8 +84,8 @@ class MyClass2 extends MyClass1 {
 }
 
 class MyClass3 extends MyClass2 {
-    async [async_constructor]() {
-        await this[async_super](100)
+    async [constructor]() {
+        await this[Super](100)
         console.log("Finished constructor")
     }
 }
@@ -85,11 +98,11 @@ class MyClass3 extends MyClass2 {
 Just like with normal constructors, the async constructor can return an object:
 
 ```js
-const {AsyncClass, async_constructor, async_super} = require("async-inheritance")
+const { Async, constructor, Super } = require("async-inheritance")
 
-class MyClass extends AsyncClass {
-    async [async_constructor]() {
-        await this[async_super]()
+class MyClass extends Async {
+    async [constructor]() {
+        await this[Super]()
         return {my_property: 1}
     }
 }
@@ -103,7 +116,7 @@ class MyClass extends AsyncClass {
 ### Notes
 
 * Overriding the normal constructor will break the async constructor's functionality
-* Acessing `this` before calling `await this[async_super]()` may cause unexpected behavior (it does NOT throw an error the way that normal JavaScript class inheritance does)
+* Acessing `this` before calling `await this[Super]()` may cause unexpected behavior (it does NOT throw an error the way that normal JavaScript class inheritance does)
 
 ### Compatibility
 
